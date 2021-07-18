@@ -3,7 +3,7 @@
 Functions:
 * (<+> x y) addition
 * (<-> x y) subtraction
-* (<*> x y) multplication
+* (<*> x y) multiplication
 * (</> x y) division
 * (<=> x y) equality
 * (<?> x) get value
