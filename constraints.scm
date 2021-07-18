@@ -45,13 +45,17 @@
     z))
 
 (define (<=> x y)
-  (let ((xvar (if (number? x)
-                  (number->variable x)
-                  x))
-        (yvar (if (number? y)
-                  (number->variable y)
-                  y)))
-    (equal xvar yvar)))
+  (cond ((and (number? x) (not (number? y)))
+         (set-value! y x 'user))
+        ((and (number? y) (not (number? x)))
+         (set-value! x y 'user))
+        (else (let ((xvar (if (number? x)
+                              (number->variable x)
+                              x))
+                    (yvar (if (number? y)
+                              (number->variable y)
+                              y)))
+                (equal xvar yvar)))))
 
 (define (<!> var)
   (forget-value! var 'user))
@@ -63,7 +67,7 @@
 
 (define (make-named-variable name)
   (let ((var (make-variable)))
-    (probe name var)
+    (track name var)
     var))
 
 (define (make-variable)
@@ -79,18 +83,13 @@
              (error "Contradiction" (list value newval)))
             (else 'ignored)))
 
-    ;;(define (forget-value! retractor)
-    ;;  (if (eq? retractor informant)
-    ;;      (begin (set! informant false)
-    ;;             (for-each-except retractor
-    ;;                              inform-about-no-value
-    ;;                              constraints))
-    ;;      'ignored))
-
     (define (forget-value! retractor)
-      (for-each-except retractor
-                       inform-about-no-value
-                       constraints))
+      (if (eq? retractor informant)
+          (begin (set! informant false)
+                 (for-each-except retractor
+                                  inform-about-no-value
+                                  constraints))
+          'ignored))
 
     (define (connect new-constraint)
       (if (not (memq new-constraint constraints))
@@ -307,17 +306,17 @@
   (connect variable this)
   (set-value! variable value this))
 
-(define (probe name variable)
-  (define (print-probe value)
-    (newline) (display "Probe: ") (display name)
+(define (track name variable)
+  (define (print-tracked value)
+    (newline) (display "Variable ") (display name)
     (display " = ") (display value))
   (define (process-new-value)
-    (print-probe (get-value variable)))
-  (define (process-forget-value) (print-probe "?"))
+    (print-tracked (get-value variable)))
+  (define (process-forget-value) (print-tracked "?"))
   (define (this message)
     (cond ((eq? message 'I-have-a-value) (process-new-value))
           ((eq? message 'I-lost-my-value) (process-forget-value))
-          (else (error "Unknown request: PROBE" message))))
+          (else (error "Unknown request: TRACK" message))))
   (connect variable this)
   this)
 
@@ -340,3 +339,6 @@
   (let ((var (make-variable)))
     (constant var num)
     var))
+
+(define (pythagorean-triplet a b c)
+  (<=> (<+> (<*> a a) (<*> b b)) (<*> c c)))
