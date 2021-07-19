@@ -1,17 +1,18 @@
 ## Simple Constraint Solver in Scheme
+(Tested compatibility with mit-scheme and chicken-scheme)
 
 Functions:
-* (<+> x y) addition
-* (<-> x y) subtraction
-* (<*> x y) multiplication
-* (</> x y) division
-* (<=> x y) equality
-* (<?> x) get value
-* (<!> x) remove value
-* (<var> name) define new variable
+* `(<+> x y)` addition
+* `(<-> x y)` subtraction
+* `(<*> x y)` multiplication
+* `(</> x y)` division
+* `(<=> x y)` equality
+* `(<?> x)` get value
+* `(<!> x)` remove value
+* `(<var> name)` new variable
 
 Examples:
-```
+```scheme
 (define (pythagorean-triplet a b c)
   (<=> (<+> (<*> a a) (<*> b b)) (<*> c c)))
 
