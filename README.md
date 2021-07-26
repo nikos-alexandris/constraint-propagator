@@ -21,7 +21,7 @@ Examples:
 > (define c (<var> 'c))
 > (pythagorean-triplet a b c)
 > (<=> a 3)
-    Variable a = 1
+    Variable a = 3
 > (<=> c 5)
     Variable b = 4
     Variable c = 5
