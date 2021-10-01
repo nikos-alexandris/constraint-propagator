@@ -1,4 +1,4 @@
-## Simple Constraint Solver in Scheme
+## Simple Constraint Propagator in Scheme
 (Tested compatibility with mit-scheme and chicken-scheme)
 
 Functions:
